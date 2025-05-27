@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smart-reader-meter
+  labels:
+    app: smart-reader-meter
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: smart-reader-meter
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: smart-reader-meter
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/path: '/metrics'
+        prometheus.io/port: '8080'
+    spec:
+      volumes:
+      - name: smart-reader-meter
+        persistentVolumeClaim:
+          claimName: smart-reader-meter
+      containers:
+      - name: smart-reader-meter
+        image: {{.Values.image.baseUrl}}:{{.Values.image.version}}
+        imagePullPolicy: "{{ .Values.image.version }}"
+        resources:
+        {{- toYaml .Values.resources | nindent 12 }}
+        env:
+        - name: METER_MPRN
+          valueFrom:
+            secretKeyRef:
+              name: smart-meter-reader-secret
+              key: METER_MPRN
+        - name: ESB_USER
+          valueFrom:
+            secretKeyRef:
+              name: smart-meter-reader-secret
+              key: ESB_USER
+        - name: ESB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: smart-meter-reader-secret
+              key: ESB_PASSWORD
+        ports:
+        - containerPort: 8080
+      livenessProbe:
+        httpGet:
+          path: /metrics
+          port: 8080
+        initialDelaySeconds: 10
+        periodSeconds: 10
+      readinessProbe:
+        httpGet:
+          path: /metrics
+          port: 8080
+        initialDelaySeconds: 5
+        periodSeconds: 5
+      imagePullSecrets:
+        - name: docker-regcred
+    

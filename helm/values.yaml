@@ -1,0 +1,15 @@
+image:
+  version: bla
+  imagePullPolicy: Always
+  baseUrl: ghcr.io/username/repo
+resources:
+  requests:
+    memory: "128Mi"
+    cpu: "250m"
+  limits:
+    memory: "256Mi"
+    cpu: "500m"
+auth:
+  meterMprn: test
+  esbUser: test
+  esbPassword: test
