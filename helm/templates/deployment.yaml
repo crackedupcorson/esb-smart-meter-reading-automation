@@ -29,10 +29,10 @@ spec:
           claimName: smart-reader-meter
       containers:
       - name: smart-reader-meter
-        image: ghcr.io/crackedupcorson/esb-smart-meter-reading-automation:{{.Values.image.version}}
+        image: {{.Values.image.baseUrl}}:{{.Values.image.version}}
         imagePullPolicy: "{{ .Values.image.version }}"
         resources:
-        {{ .Values.resources | nindent 12 }}
+        {{- toYaml .Values.resources | nindent 12 }}
         env:
         - name: METER_MPRN
           valueFrom:

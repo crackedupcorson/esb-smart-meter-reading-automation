@@ -421,7 +421,6 @@ class MeterReader():
                 csv_reader = csv.DictReader(csv_file.split('\n'))
                 for row in csv_reader:
                     my_json.append(row)
-                json_file = json.dumps(my_json, indent=2)
                 if debug_mode:print("[COMPLETED] JSON file created. Use [json_file] .")
             else:
                 print("[FAIL] Something is wrong with CSV file header structure, cant convert to JSON. Expected [csv_file[0:4] == 'MPRN'] but failed.")
@@ -433,4 +432,4 @@ class MeterReader():
 
         ###/ Select file format of your choice /###
         #print(csv_file)
-        return json_file
+        return my_json

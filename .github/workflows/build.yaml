@@ -55,3 +55,8 @@ jobs:
             --platform linux/amd64,linux/arm64 \
             --push \
             -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}:${{ env.IMAGE_TAG }} .
+      - name: Helm Template & Lint
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+          helm lint ./helm
+          helm template ./helm
