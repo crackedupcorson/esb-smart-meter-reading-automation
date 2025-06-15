@@ -24,9 +24,9 @@ spec:
         prometheus.io/port: '8080'
     spec:
       volumes:
-      - name: smart-reader-meter
+      - name: mysql-data 
         persistentVolumeClaim:
-          claimName: smart-reader-meter
+          claimName: mysql-data
       containers:
       - name: smart-reader-meter
         image: {{.Values.image.baseUrl}}:{{.Values.image.version}}
@@ -51,6 +51,33 @@ spec:
               key: ESB_PASSWORD
         ports:
         - containerPort: 8080
+      - name: mysql
+        image: mysql:8.0
+        ports:
+        - containerPort: 3306
+        resources:
+        {{- toYaml .Values.mysqlResources | nindent 12 }}
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: smart-reader-meter-secret
+              key: MYSQL_ROOT_PASSWORD
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: smart-reader-meter-secret
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: smart-reader-meter-secret
+              key: MYSQL_PASSWORD
+        - name:  MYSQL_DATABASE
+          value: meterdb
+        volumeMounts:
+          - name: mysql-data 
+            mountPath: /var/lib/mysql
       livenessProbe:
         httpGet:
           path: /metrics
@@ -65,4 +92,3 @@ spec:
         periodSeconds: 5
       imagePullSecrets:
         - name: docker-regcred
-    
