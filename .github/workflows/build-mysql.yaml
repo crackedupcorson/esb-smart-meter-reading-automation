@@ -1,5 +1,5 @@
 # TODO - build a docker image that contains the database and table creation scripts
-name: Build and Push Docker Image
+name: Build and Push MySQL Image
 
 on:
   push:
