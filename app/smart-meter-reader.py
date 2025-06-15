@@ -3,6 +3,7 @@ from flask import request
 
 from processor import MeterReader
 from metrics import Metrics
+from db import MeterReadingDB
 
 from waitress import serve
 import prometheus_client
@@ -23,8 +24,10 @@ app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
 @app.route('/daily')
 def get_daily_consumption():
     reader = MeterReader()
+    # db = MeterReadingDB()
     daily_consuption = reader.get_energy_consumption()
-    metrics.populate_metrics(daily_consuption)
+    # db.insert_readings(daily_consuption)
+    # db.close()
     return daily_consuption
 
 def register_prom_metrics():
