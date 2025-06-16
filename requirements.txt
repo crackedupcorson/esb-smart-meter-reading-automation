@@ -4,3 +4,4 @@ flask===3.0.2
 waitress===3.0.2
 prometheus-client===0.22.0
 mysql-connector-python===9.3.0
+pytest==8.4.0
