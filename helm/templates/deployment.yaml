@@ -52,7 +52,7 @@ spec:
         ports:
         - containerPort: 8080
       - name: mysql
-        image: mysql:8.0
+        image: "{{.Values.image.baseUrl}}-mysql:{{.Values.image.mysqlVersion}}"
         ports:
         - containerPort: 3306
         resources:
