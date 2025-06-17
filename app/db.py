@@ -6,9 +6,9 @@ import os
 class MeterReadingDB:
     def __init__(self):
         db_host = os.environ.get("METER_READER_DB_HOST")
-        db_user = os.environ.get("METER_READER_DB_USER")
-        db_pass = os.environ.get("METER_READER_DB_PASS")
-        database = os.environ.get("METER_READER_DATABASE")
+        db_user = os.environ.get("MYSQL_USER")
+        db_pass = os.environ.get("MYSQL_PASSWORD")
+        database = os.environ.get("MYSQL_DATABASE")
         self.conn = mysql.connector.connect(
             host=db_host,
             user=db_user,

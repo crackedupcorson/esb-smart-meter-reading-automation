@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: smart-reader-meter
+  name: smart-meter-reader
   labels:
-    app: smart-reader-meter
+    app: smart-meter-reader
 spec:
   replicas: 1
   selector: 
     matchLabels:
-      app: smart-reader-meter
+      app: smart-meter-reader
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -17,23 +17,25 @@ spec:
   template:
     metadata:
       labels:
-        app: smart-reader-meter
+        app: smart-meter-reader
       annotations:
         prometheus.io/scrape: 'true'
         prometheus.io/path: '/metrics'
         prometheus.io/port: '8080'
     spec:
       volumes:
-      - name: mysql-data 
+      - name: smr-mysql-data
         persistentVolumeClaim:
-          claimName: mysql-data
+          claimName: smr-mysql-data
       containers:
-      - name: smart-reader-meter
+      - name: smart-meter-reader
         image: {{.Values.image.baseUrl}}:{{.Values.image.version}}
-        imagePullPolicy: "{{ .Values.image.version }}"
+        imagePullPolicy: Always
         resources:
         {{- toYaml .Values.resources | nindent 12 }}
         env:
+        - name: METER_READER_DB_HOST
+          value: localhost:3306
         - name: METER_MPRN
           valueFrom:
             secretKeyRef:
@@ -49,6 +51,18 @@ spec:
             secretKeyRef:
               name: smart-meter-reader-secret
               key: ESB_PASSWORD
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: smart-meter-reader-secret
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: smart-meter-reader-secret
+              key: MYSQL_PASSWORD
+        - name:  MYSQL_DATABASE
+          value: meterdb
         ports:
         - containerPort: 8080
       - name: mysql
@@ -61,23 +75,23 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: smart-reader-meter-secret
+              name: smart-meter-reader-secret
               key: MYSQL_ROOT_PASSWORD
         - name: MYSQL_USER
           valueFrom:
             secretKeyRef:
-              name: smart-reader-meter-secret
+              name: smart-meter-reader-secret
               key: MYSQL_USER
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: smart-reader-meter-secret
+              name: smart-meter-reader-secret
               key: MYSQL_PASSWORD
         - name:  MYSQL_DATABASE
           value: meterdb
         volumeMounts:
-          - name: mysql-data 
-            mountPath: /var/lib/mysql
+          - name: smr-mysql-data 
+            mountPath: /opt/mysql
       livenessProbe:
         httpGet:
           path: /metrics

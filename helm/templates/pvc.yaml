@@ -1,0 +1,11 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: smr-mysql-data
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: container-storage
+  resources:
+    requests:
+      storage: 1Gi
