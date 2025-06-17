@@ -114,6 +114,7 @@ class MeterReader():
             print("[!] Request #2 text :: ", request_2_response.text)
             print("##### REQUEST 3 -- GET [API CombinedSigninAndSignup] ######")
 
+        print(f"RECEIVED STATUS CODE OF {request_2_response.status_code} from login")
         request_3_response = session.get(
             'https://login.esbnetworks.ie/esbntwkscustportalprdb2c01.onmicrosoft.com/B2C_1A_signup_signin/api/CombinedSigninAndSignup/confirmed',
             params={
