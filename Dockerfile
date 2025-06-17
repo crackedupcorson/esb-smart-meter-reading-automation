@@ -10,4 +10,4 @@ ENV PYTHONPATH=/app
 
 EXPOSE 8080
 
-CMD ["python", "esb-smart-meter-reader.py"]
+CMD ["python", "smart-meter-reader.py"]
