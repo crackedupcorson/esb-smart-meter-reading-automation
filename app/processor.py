@@ -143,7 +143,7 @@ class MeterReader():
                 'x-ms-cpim-trans':request_2_response_cookies.get("x-ms-cpim-trans"),
             },
         )
-
+        print(f"RECEIVED STATUS CODE OF: %S from login", request_3_response.status_code)
         tester_soup = BeautifulSoup(request_3_response.content, 'html.parser')
         page_title = tester_soup.find("title")
         request_3_response_cookies = session.cookies.get_dict()
@@ -194,7 +194,6 @@ class MeterReader():
                 print(form.prettify() if form else "Form is None!")
                 print("Dumping full page HTML for debugging:")
                 print(soup.prettify())
-                return None
             else:
                 client_info_ = form.find('input', {'name': 'client_info'})['value']
                 code_ = form.find('input', {'name': 'code'})['value']
