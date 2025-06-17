@@ -91,7 +91,7 @@ spec:
           value: meterdb
         volumeMounts:
           - name: smr-mysql-data 
-            mountPath: /opt/mysql
+            mountPath: /var/lib/mysql
       livenessProbe:
         httpGet:
           path: /metrics

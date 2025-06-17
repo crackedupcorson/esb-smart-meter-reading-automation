@@ -188,17 +188,30 @@ class MeterReader():
             form = soup.find('form', {'id': 'auto'})
             login_url_ = form['action']
             state_ = form.find('input', {'name': 'state'})['value']
-            client_info_ = form.find('input', {'name': 'client_info'})['value']
-            code_ = form.find('input', {'name': 'code'})['value']
-            if debug_mode:
-                print("login url ::" ,login_url_)
-                print("state_ ::", state_)
-                print("client_info_ ::", client_info_)
-                print("code_ ::", code_)
-        except:
-            print("[FAILED] Unable to get full set of required cookies from [request_3_response.content] -- too many retries (captcha?) or prior sessions was not closed properly. Please wait 6 hours for server to timeout and try again.")
-            session.close()
-            raise SystemExit(0)
+            input_elem = form.find('input', {'name': 'client_info'})
+            if input_elem is None:
+                print("client_info input not found! Dumping form HTML:")
+                print(form.prettify() if form else "Form is None!")
+                print("Dumping full page HTML for debugging:")
+                print(soup.prettify())
+                return None
+            else:
+                client_info_ = form.find('input', {'name': 'client_info'})['value']
+                code_ = form.find('input', {'name': 'code'})['value']
+                if debug_mode:
+                    print("login url ::" ,login_url_)
+                    print("state_ ::", state_)
+                    print("client_info_ ::", client_info_)
+                    print("code_ ::", code_)
+        except Exception as e:
+            print(f"Exception occurred while parsing form: {e}")
+            try:
+                print("Dumping form HTML for debugging:")
+                print(form.prettify() if form else "Form is None!")
+                print("Dumping full page HTML for debugging:")
+                print(soup.prettify())
+            except Exception as inner_e:
+                print(f"Failed to print HTML: {inner_e}")
 
         if debug_mode:print("##### REQUEST 4 -- POST [signin-oidc] ######")
         sleeping_delay= randint(2,5)
