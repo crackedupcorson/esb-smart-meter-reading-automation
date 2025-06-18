@@ -195,14 +195,14 @@ class MeterReader():
                 print(form.prettify() if form else "Form is None!")
                 print("Dumping full page HTML for debugging:")
                 print(soup.prettify())
-            else:
-                client_info_ = form.find('input', {'name': 'client_info'})['value']
-                code_ = form.find('input', {'name': 'code'})['value']
-                if debug_mode:
-                    print("login url ::" ,login_url_)
-                    print("state_ ::", state_)
-                    print("client_info_ ::", client_info_)
-                    print("code_ ::", code_)
+            
+            client_info_ = form.find('input', {'name': 'client_info'})['value']
+            code_ = form.find('input', {'name': 'code'})['value']
+            if debug_mode:
+                print("login url ::" ,login_url_)
+                print("state_ ::", state_)
+                print("client_info_ ::", client_info_)
+                print("code_ ::", code_)
         except Exception as e:
             print(f"Exception occurred while parsing form: {e}")
             try:
