@@ -24,11 +24,11 @@ app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
 @app.route('/daily')
 def get_daily_consumption():
     reader = MeterReader()
-    # db = MeterReadingDB()
+    db = MeterReadingDB()
     consumption = reader.get_energy_consumption()
     print(consumption)
-    # db.insert_readings(consumption)
-    # db.close()
+    db.insert_readings(consumption)
+    db.close()
     return consumption
 
 def register_prom_metrics():
