@@ -274,7 +274,7 @@ class MeterReader():
             print("[!] Request #5 Status Code ::", request_5_response.status_code)
             print("[!] Request #5 Response Headers ::", request_5_response.headers)
             print("[!] Request #5 Cookies Captured ::", request_5_response_cookies)
-            print("[!] Request #5 Content ::", request_5_response.content)
+            # print("[!] Request #5 Content ::", request_5_response.content)
             print("##### Welcome page block #####")
             
         user_welcome_soup = BeautifulSoup(request_5_response.text,'html.parser')
@@ -357,7 +357,7 @@ class MeterReader():
             print("[!] Request #7 Status Code ::", request_7_response.status_code)
             print("[!] Request #7 Response Headers ::", request_7_response.headers)
             print("[!] Request #7 Cookies Captured ::", request_7_response_cookies)
-            print("[!] Request #7 Content ::", request_7_response.content)
+            # print("[!] Request #7 Content ::", request_7_response.content)
             print("File download token :: ",file_download_token)
             print("##### REQUEST 8 -- GET [/DataHub/DownloadHdfPeriodic] ######")
         request_8_url = "https://myaccount.esbnetworks.ie/DataHub/DownloadHdfPeriodic"
