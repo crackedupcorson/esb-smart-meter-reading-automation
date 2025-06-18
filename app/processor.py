@@ -189,12 +189,6 @@ class MeterReader():
             form = soup.find('form', {'id': 'auto'})
             login_url_ = form['action']
             state_ = form.find('input', {'name': 'state'})['value']
-            input_elem = form.find('input', {'name': 'client_info'})
-            if input_elem is None:
-                print("client_info input not found! Dumping form HTML:")
-                print(form.prettify() if form else "Form is None!")
-                print("Dumping full page HTML for debugging:")
-                print(soup.prettify())
             
             client_info_ = form.find('input', {'name': 'client_info'})['value']
             code_ = form.find('input', {'name': 'code'})['value']
@@ -205,14 +199,7 @@ class MeterReader():
                 print("code_ ::", code_)
         except Exception as e:
             print(f"Exception occurred while parsing form: {e}")
-            try:
-                print("Dumping form HTML for debugging:")
-                print(form.prettify() if form else "Form is None!")
-                print("Dumping full page HTML for debugging:")
-                print(soup.prettify())
-            except Exception as inner_e:
-                print(f"Failed to print HTML: {inner_e}")
-
+        
         if debug_mode:print("##### REQUEST 4 -- POST [signin-oidc] ######")
         sleeping_delay= randint(2,5)
         if debug_mode:print('random sleep for',sleeping_delay,'seconds...')
