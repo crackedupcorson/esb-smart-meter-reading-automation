@@ -315,8 +315,8 @@ class MeterReader():
         request_6_response_cookies = session.cookies.get_dict()
 
         if debug_mode:
-            print("[!] Request #6 Status Code ::", request_5_response.status_code)
-            print("[!] Request #6 Response Headers ::", request_5_response.headers)
+            print("[!] Request #6 Status Code ::", request_6_response.status_code)
+            print("[!] Request #6 Response Headers ::", request_6_response.headers)
             print("[!] Request #6 Cookies Captured ::", request_6_response_cookies)
             print("##### My Energy Consumption - Customer Portal #####")
         consumption_soup = BeautifulSoup(request_6_response.text,'html.parser')
