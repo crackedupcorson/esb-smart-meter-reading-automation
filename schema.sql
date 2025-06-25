@@ -4,5 +4,5 @@ CREATE TABLE meter_readings (
     import_reading FLOAT NOT NULL,
     export_reading FLOAT NOT NULL
 );
-CREATE USER 'superuser'@'localhost' IDENTIFIED BY 'superuser';
-GRANT ALL PRIVILEGES ON * . * TO 'superuser'@'localhost';
+CREATE USER 'meter-reader'@'localhost' IDENTIFIED WITH mysql_native_password BY 'meter-reader';
+GRANT ALL PRIVILEGES ON * . * TO 'meter-reader'@'localhost';
