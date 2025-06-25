@@ -35,7 +35,7 @@ spec:
         {{- toYaml .Values.resources | nindent 12 }}
         env:
         - name: METER_READER_DB_HOST
-          value: localhost:3306
+          value: localhost
         - name: METER_MPRN
           valueFrom:
             secretKeyRef:
