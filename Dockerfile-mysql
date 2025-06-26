@@ -1,4 +1,4 @@
-FROM mysql:latest
+FROM --platform=linux/arm64/v8 arm64v8/mysql:9.3-oracle
 COPY ./schema.sql /docker-entrypoint-initdb.d/schema.sql
 
 EXPOSE 3306
