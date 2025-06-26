@@ -9,6 +9,7 @@ from waitress import serve
 import prometheus_client
 from prometheus_client import make_wsgi_app
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
+import asyncio
 
 prometheus_client.REGISTRY.unregister(prometheus_client.GC_COLLECTOR)
 prometheus_client.REGISTRY.unregister(prometheus_client.PLATFORM_COLLECTOR)
@@ -25,11 +26,15 @@ app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
 def get_daily_consumption():
     reader = MeterReader()
     db = MeterReadingDB()
-    consumption = reader.get_energy_consumption()
-    print(consumption)
-    db.insert_readings(consumption)
-    db.close()
-    return consumption
+    async def process_consumption():
+        loop = asyncio.get_event_loop()
+        consumption = await loop.run_in_executor(None, reader.get_energy_consumption)
+        print(consumption)
+        await loop.run_in_executor(None, db.insert_readings, consumption)
+        db.close()
+        return consumption
+
+    return asyncio.run(process_consumption())
 
 def register_prom_metrics():
     metrics.collect()
