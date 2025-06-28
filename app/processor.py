@@ -314,14 +314,40 @@ class MeterReader():
         request_6_response = session.get(request_6_url, headers=request_6_headers,cookies=request_6_cookies)
         request_6_response_cookies = session.cookies.get_dict()
 
+        if not request_6_response.status_code in range(200, 202):
+            print(f"[ERROR] Request #6 failed with status {request_6_response.status_code}")
+            print(request_6_response.text)
+            session.close()
+            return None
+
         if debug_mode:
             print("[!] Request #6 Status Code ::", request_6_response.status_code)
             print("[!] Request #6 Response Headers ::", request_6_response.headers)
             print("[!] Request #6 Cookies Captured ::", request_6_response_cookies)
             print("##### My Energy Consumption - Customer Portal #####")
-        consumption_soup = BeautifulSoup(request_6_response.text,'html.parser')
-        consumption_page_title_ = consumption_soup.find('title')
-        welcome_page_title_ = consumption_soup.find('h1', class_='esb-title-h1')
+
+        try: 
+            consumption_soup = BeautifulSoup(request_6_response.text,'html.parser')
+            consumption_page_title_ = consumption_soup.find('title')
+            welcome_page_title_ = consumption_soup.find('h1', class_='esb-title-h1')
+        
+            if consumption_page_title_ is None:
+                print("[ERROR] Could not find <title> in request 6 response!")
+                print("[DEBUG] Response snippet:", request_6_response.text[:500])
+            else:
+                print("[!] Page Title ::", consumption_page_title_.text)
+
+            if welcome_page_title_ is None:
+                print("[ERROR] Could not find <h1 class='esb-title-h1'> in request 6 response!")
+                print("[DEBUG] Response snippet:", request_6_response.text[:500])
+            else:
+                print("[!] 'esb-title-h1' ::", welcome_page_title_.text)
+        except Exception as e:
+            print(f"[ERROR] Exception while parsing request 6 HTML: {e}")
+            print("[DEBUG] Full response text:")
+            print(request_6_response.text[:1000])
+            return None
+        
         if debug_mode:
             print("[!] Page Title ::", consumption_page_title_.text)    # it should print "My Energy Consumption - Customer Portal"
             print("[!] 'esb-title-h1' ::", welcome_page_title_.text)    # It should print "My Energy Consumption"
@@ -353,6 +379,12 @@ class MeterReader():
         request_7_response = session.get(request_7_url,headers=request_7_headers,cookies=request_7_cookies)
         request_7_response_cookies = session.cookies.get_dict()
         file_download_token = json.loads(request_7_response.text)["token"]
+        if not request_7_response.status_code in range(200, 202):
+            print(f"[ERROR] Request #7 failed with status {request_7_response.status_code}")
+            print(request_7_response.text)
+            session.close()
+            return None
+        
         if debug_mode:
             print("[!] Request #7 Status Code ::", request_7_response.status_code)
             print("[!] Request #7 Response Headers ::", request_7_response.headers)
@@ -385,6 +417,12 @@ class MeterReader():
             "searchType": "day"  ### <<<< !!! THIS IS WHERE YOU SELECT WHICH FILE YOU WANT !!!
         }
         request_8_response = session.post(request_8_url, headers=request_8_headers, json=payload_data)
+        if not request_8_response.status_code in range (200, 202):
+            print(f"[ERROR] Request #8 failed with status {request_8_response.status_code}")
+            print(request_8_response.text)
+            session.close()
+            return None
+        
         if debug_mode:
             print("[!] Request #8 Status Code ::", request_8_response.status_code)
             print("[!] Request #8 Response Headers ::", request_8_response.headers)

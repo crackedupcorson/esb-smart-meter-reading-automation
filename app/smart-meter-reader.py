@@ -26,15 +26,9 @@ app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
 def get_daily_consumption():
     reader = MeterReader()
     db = MeterReadingDB()
-    async def process_consumption():
-        loop = asyncio.get_event_loop()
-        consumption = await loop.run_in_executor(None, reader.get_energy_consumption)
-        print(consumption)
-        await loop.run_in_executor(None, db.insert_readings, consumption)
-        db.close()
-        return consumption
-
-    return asyncio.run(process_consumption())
+    consumption = reader.get_energy_consumptionO()
+    db.insert_readings(consumption)
+    return ""
 
 def register_prom_metrics():
     metrics.collect()
