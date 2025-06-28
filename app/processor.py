@@ -416,10 +416,11 @@ class MeterReader():
             "mprn": meter_mprn,
             "searchType": "day"  ### <<<< !!! THIS IS WHERE YOU SELECT WHICH FILE YOU WANT !!!
         }
+        print(f"Calling {request_8_url} with payload: {payload_data}")
         request_8_response = session.post(request_8_url, headers=request_8_headers, json=payload_data)
         if not request_8_response.status_code in range (200, 202):
             print(f"[ERROR] Request #8 failed with status {request_8_response.status_code}")
-            print(request_8_response.text)
+            print(f"[ERROR] Request #8 failed with response headers {request_8_response.headers}")
             session.close()
             return None
         
