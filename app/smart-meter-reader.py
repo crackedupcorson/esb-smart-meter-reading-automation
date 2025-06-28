@@ -26,7 +26,7 @@ app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
 def get_daily_consumption():
     reader = MeterReader()
     db = MeterReadingDB()
-    consumption = reader.get_energy_consumptionO()
+    consumption = reader.get_energy_consumption()
     db.insert_readings(consumption)
     return ""
 
