@@ -27,7 +27,10 @@ def get_daily_consumption():
     reader = MeterReader()
     db = MeterReadingDB()
     consumption = reader.get_energy_consumption()
-    db.insert_readings(consumption)
+    if consumption is not None:
+        db.insert_readings(consumption)
+    else:
+        "No consumption data returned"
     return ""
 
 def register_prom_metrics():

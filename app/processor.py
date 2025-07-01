@@ -21,7 +21,7 @@ class MeterReader():
         return login_creds
 
     def get_energy_consumption(self):
-        debug_mode=True
+        debug_mode=False
         if debug_mode:print("##### REQUEST 1 -- GET [https://myaccount.esbnetworks.ie/] ######")
         login_creds = self.get_login_creds()
         meter_mprn = login_creds["meter_mprn"]
@@ -269,7 +269,11 @@ class MeterReader():
 
         request_5_response = session.get(request_5_url,headers=request_5_headers,cookies=request_5_cookies)
         request_5_response_cookies = session.cookies.get_dict()
-
+        if not request_5_response.status_code in (200, 202):
+            print(f"[ERROR] Request #5 failed with status {request_5_response.status_code}")
+            print(request_5_response.text)
+            session.close()
+            return None
         if debug_mode:
             print("[!] Request #5 Status Code ::", request_5_response.status_code)
             print("[!] Request #5 Response Headers ::", request_5_response.headers)
@@ -466,9 +470,4 @@ class MeterReader():
         except:
             print("[FAIL] Something is wrong with CSV file structure, cant convert to JSON, check/validate if [csv.DictReader(csv_file.split('\n'))] works.")
             raise SystemExit(0)
-
-        ###### END OF SCRIPT ###### 
-
-        ###/ Select file format of your choice /###
-        #print(csv_file)
         return my_json
